@@ -711,39 +711,11 @@ cd ../frontend && pnpm type-check
 
 **Grupo Shelby - UTN FRRo**
 
-### Integrantes y Contribuciones
-
-| Nombre | Legajo | GitHub | Roles y Responsabilidades |
-|--------|--------|--------|---------------------------|
-| **Peralta, Lautaro Martín** | 53483 | [@lautaro-peralta](https://github.com/lautaro-peralta) | **Líder del Proyecto**, Desarrollo Backend (API REST, Autenticación, BD), Gestión del Proyecto, Diseño de Arquitectura, Planificación de Sprints, Coordinación General |
-| **Delprato, Luca** | 50215 | [@LucaDelpra](https://github.com/LucaDelpra) | Testing & QA (Backend y Frontend), Integración Continua (GitHub Actions), Automatización de Workflows, Mantenimiento de Infraestructura |
-| **Splivalo, Tomas** | 51665 | [@Tsplivalo](https://github.com/Tsplivalo) | Desarrollo Frontend (Angular SPA, Componentes UI), Testing Frontend, Optimización de Rendimiento, Integración Full-Stack |
-
-### Detalles de Contribuciones
-
-**Lautaro Martín Peralta (Líder)**
-- Diseño y planificación del sistema completo
-- Implementación del backend (Express.js + MikroORM + PostgreSQL)
-- Arquitectura de autenticación con JWT
-- Gestión de submódulos y coordinación entre equipos
-- Definición de la propuesta funcional y alcance del proyecto
-- Decisiones técnicas principales
-
-**Luca Delprato (Testing & QA)**
-- Implementación de suites de tests (Backend + Frontend)
-- Configuración y mantenimiento de GitHub Actions
-- Automatización de workflows de CI/CD
-- Coverage de tests y reportes de calidad
-- Resolución de problemas de integración continua
-- Documentación de estrategias de testing
-
-**Tomas Splivalo (Frontend & Testing)**
-- Desarrollo completo del Frontend (Angular 18)
-- Implementación de componentes reutilizables
-- Testing de componentes y servicios
-- Optimizaciones de rendimiento en Vercel
-- Resolución de problemas de caché y deployment
-- Colaboración en testing full-stack
+| Nombre | Legajo | GitHub | Responsabilidades |
+|--------|--------|--------|-------------------|
+| **Peralta, Lautaro Martín** | 53483 | [@lautaro-peralta](https://github.com/lautaro-peralta) | **Líder del Proyecto** - Desarrollo Backend (API REST, Autenticación, BD), Infraestructura Local (Docker, PostgreSQL, Redis), Puesta en Producción (Neon.tech, Render, Vercel), Diseño Arquitectónico, Gestión de Submódulos y Coordinación General |
+| **Splivalo, Tomas** | 51665 | [@Tsplivalo](https://github.com/Tsplivalo) | Frontend (Angular SPA), Debugging Backend, Integración Full-Stack, Optimización de Rendimiento |
+| **Delprato, Luca** | 50215 | [@LucaDelpra](https://github.com/LucaDelpra) | Testing & QA, CI/CD (GitHub Actions), Automatización de Workflows |
 
 ---
 
