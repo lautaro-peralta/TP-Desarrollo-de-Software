@@ -135,6 +135,7 @@ git submodule status
 - **Base de Datos:** PostgreSQL 16
 - **Cache:** Redis 7
 - **Autenticación:** JWT
+- **Logger:** Pino
 - **Documentación API:** Swagger/OpenAPI
 
 ### Frontend
@@ -294,9 +295,10 @@ pnpm start:dev
 
 **Salida esperada:**
 ```
-[Nest] 12345  - 05/21/2026, 10:00:00     LOG [NestFactory] Starting Nest application...
-[Nest] 12345  - 05/21/2026, 10:00:02     LOG [InstanceLoader] TypeOrmModule dependencies initialized
-[Nest] 12345  - 05/21/2026, 10:00:03     LOG Server listening on port 3000
+[11:25:33.123] INFO (server): Starting application initialization...
+[11:25:33.456] INFO (server): Initializing critical services (email, scheduler)...
+[11:25:34.789] INFO (server): Application initialization completed successfully
+[11:25:34.890] INFO (server): Server running on http://localhost:3000/ [development]
 ```
 
 **Endpoints de verificación:**
