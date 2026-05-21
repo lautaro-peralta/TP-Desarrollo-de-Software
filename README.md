@@ -1,156 +1,215 @@
 # The Garrison System (TGS)
 
-**Trabajo Práctico - Desarrollo de Software**
-
+**Trabajo Práctico - Desarrollo de Software**  
 **UTN FRRo - Grupo Shelby**
 
----
-
-The Garrison System es un sistema de ventas y gestión de recursos ambientado en el Birmingham de los años 1920. Simula una red comercial con elementos de riesgo, corrupción y toma de decisiones estratégicas, inspirado en la serie _Peaky Blinders_.
+[![Materia](https://img.shields.io/badge/Materia-Desarrollo%20de%20Software-blue)]()
+[![Universidad](https://img.shields.io/badge/Universidad-UTN%20FRRo-green)]()
+[![Año](https://img.shields.io/badge/A%C3%B1o-2025-orange)]()
 
 ---
 
 ## 📋 Contenidos
 
-- [Inicio Rápido](#-inicio-rápido)
+- [🎯 Quick Start para Evaluadores](#-quick-start-para-evaluadores)
 - [Sobre este Proyecto](#sobre-este-proyecto)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Tecnologías](#tecnologías)
-- [Instalación](#instalación)
-- [Ejecución](#ejecución)
-- [Cargar Datos de Prueba](#cargar-datos-de-prueba)
+- [Requisitos Previos](#requisitos-previos)
+- [Configuración Inicial](#configuración-inicial)
+- [Ejecución Local](#ejecución-local)
+- [Usuarios de Prueba](#usuarios-de-prueba)
+- [Testing](#testing)
 - [Documentación](#documentación)
 - [Troubleshooting](#troubleshooting)
 - [Equipo](#equipo)
 
 ---
 
-## 🚀 Inicio Rápido
+## 🎯 Quick Start para Evaluadores
 
-Recomendamos para una experiencia de usuario más cómoda, simplificada y rápida, ingresar al sitio web: https://garrsys.vercel.app
+Si solo quieres **probar rápidamente** el sistema (5-10 minutos):
 
-### Desarrollo Local
+### Opción 1: Producción (Recomendado - Sin instalación)
+```bash
+Acceder directamente: https://garrsys.vercel.app
+Usar credenciales en la sección "Usuarios de Prueba" ↓
+```
 
-**Configuración simplificada con Docker para la infraestructura:**
-
+### Opción 2: Desarrollo Local (Con Docker)
 ```bash
 # 1. Clonar con submódulos
 git clone --recurse-submodules https://github.com/lautaro-peralta/GarrSYS.git
 cd GarrSYS
 
-# 2. Levantar infraestructura (PostgreSQL + Redis) con Docker
-cd infra
-docker compose up -d
+# 2. Setup automático (requiere Docker)
+make setup    # Linux/Mac
+# O manualmente:
+cd infra && docker compose up -d && cd ..
 
 # 3. Backend
-cd ../apps/backend
-pnpm install
-cp .env.example .env.development
+cd apps/backend && pnpm install && cp .env.example .env.development
+# Editar .env.development: cambiar EMAIL_VERIFICATION_REQUIRED=false (ya lo dice)
 pnpm start:dev
 
 # 4. Frontend (en otra terminal)
-cd apps/frontend
-pnpm install
-pnpm start
+cd apps/frontend && pnpm install && pnpm start
+
+# 5. Cargar datos de prueba
+make load-data    # Desde raíz del proyecto
 ```
 
-**Acceder a:**
+**URLs locales:**
 - Frontend: http://localhost:4200
 - Backend API: http://localhost:3000
 - Swagger Docs: http://localhost:3000/api-docs
-
-### Producción en la Nube
-
-El proyecto está desplegado en producción utilizando servicios en la nube:
-- **Neon.tech** - PostgreSQL serverless
-- **Redis Cloud** - Cache distribuido
-- **Render** - Backend API
-- **Vercel** - Frontend estático
+- Health Check: http://localhost:3000/health
 
 ---
 
 ## Sobre este Proyecto
 
-Trabajo Práctico de la materia **Desarrollo de Software** de la UTN FRRo. El proyecto usa submódulos de Git para separar frontend, backend e infraestructura.
+**The Garrison System** es un sistema integral de gestión y ventas ambientado en el Birmingham de los años 1920. Es un **Trabajo Práctico** de la materia *Desarrollo de Software* de la UTN FRRo que simula una red comercial con elementos de riesgo, corrupción y toma de decisiones estratégicas.
 
-**Funcionalidades principales:**
-- Gestión de productos (legales e ilegales)
-- Clientes y ventas
-- Socios y distribuidores
-- Zonas de operación
-- Autoridades y sobornos
-- Decisiones del Consejo Shelby
+### Funcionalidades principales
+- 🏪 Gestión de productos (legales e ilegales)
+- 👥 Gestión de clientes, socios y distribuidores
+- 📊 Sistema de ventas con trazabilidad
+- 🗺️ Zonas de operación y control territorial
+- 🚨 Autoridades y sistema de sobornos
+- 📋 Consejo Shelby para decisiones estratégicas
+- 🔐 Autenticación JWT con roles y permisos
+- 📧 Verificación de email integrada
+
+### Arquitetura
+El proyecto utiliza **Git Submodules** para separar componentes:
+- **Backend** (submódulo): API REST
+- **Frontend** (submódulo): Aplicación SPA
+- **Infraestructura** (este repo): Docker, scripts, documentación
 
 ---
 
 ## Estructura del Proyecto
 
 ```
-TP-Desarrollo-de-Software/
+GarrSYS/
 ├── apps/
 │   ├── backend/              → Submódulo: API REST (Node.js + TypeScript)
+│   │                         Endpoints, BD, lógica de negocio
 │   └── frontend/             → Submódulo: SPA (Angular + TypeScript)
+│                             Componentes, servicios, UI
 ├── infra/
 │   └── docker-compose.yml    → PostgreSQL 16 y Redis 7
 ├── scripts/
-│   └── load-test-data.sh/.bat → Script para cargar datos
-└── Makefile                  → Comandos simplificados
+│   ├── load-test-data.sh    → Script Unix: cargar datos de prueba
+│   └── load-test-data.bat   → Script Windows: cargar datos de prueba
+├── docs/
+│   └── proposal.md          → Propuesta del proyecto
+├── Makefile                 → Comandos simplificados
+└── README.md               → Este archivo
+```
+
+### Información importante sobre Submódulos
+
+Los submódulos del proyecto están en repositorios externos:
+- **Backend:** https://github.com/lautaro-peralta/TGS-Backend
+- **Frontend:** https://github.com/Tsplivalo/TGS-Frontend
+
+**Para verificar estado de submódulos:**
+```bash
+git submodule status
+# Output esperado:
+#  abc1234... apps/backend (commit-hash)
+#  def5678... apps/frontend (commit-hash)
 ```
 
 ---
 
 ## Tecnologías
 
-### Stack de Desarrollo
+### Backend
+- **Runtime:** Node.js 18+
+- **Lenguaje:** TypeScript
+- **Framework:** Express.js
+- **ORM:** MikroORM
+- **Base de Datos:** PostgreSQL 16
+- **Cache:** Redis 7
+- **Autenticación:** JWT
+- **Documentación API:** Swagger/OpenAPI
 
-**Backend:** Node.js 18+ | TypeScript | Express.js | MikroORM | PostgreSQL 16 | Redis | JWT
+### Frontend
+- **Framework:** Angular 18+
+- **Lenguaje:** TypeScript
+- **Estilos:** SCSS
+- **Proxy:** Proxy a Backend local
 
-**Frontend:** Angular 18+ | TypeScript | SCSS
+### Infraestructura Local
+- **Contenedores:** Docker + Docker Compose
+- **Control de Versiones:** Git con Submódulos
 
-**Infraestructura Local:** Docker | Docker Compose | Git (submódulos)
-
-### Stack de Producción (Cloud)
-
-**Database:** Neon.tech (PostgreSQL 16 serverless)
-
-**Cache:** Redis Cloud (Redis 7)
-
-**Backend Hosting:** Render (Node.js containers)
-
-**Frontend Hosting:** Vercel (Edge Network)
+### Infraestructura Producción
+- **Base de Datos:** Neon.tech (PostgreSQL 16 serverless)
+- **Cache:** Redis Cloud (Redis 7)
+- **Backend Hosting:** Render (Node.js containers)
+- **Frontend Hosting:** Vercel (Edge Network)
 
 ---
 
-## Instalación
+## Requisitos Previos
 
-### Requisitos
+### Software Obligatorio
+- **Node.js** >= 18 LTS
+- **pnpm** >= 9 (gestor de paquetes)
+- **Docker** >= 24 y **Docker Compose** >= 2
+- **Git** (con soporte para submódulos)
 
-- **Node.js** >= 18
-- **pnpm** >= 9
-- **Docker** >= 24 y Docker Compose >= 2
-- **Git**
+### Verificar instalación
+```bash
+node --version       # v18+
+pnpm --version       # 9+
+docker --version     # 24+
+docker compose version
+git --version
+```
 
-### Pasos de Instalación
+### Recursos mínimos
+- 2 GB RAM disponible
+- 500 MB espacio en disco
+- Puertos libres: 3000 (backend), 4200 (frontend), 5432 (PostgreSQL), 6379 (Redis)
 
-#### 1. Clonar el repositorio con submódulos
+---
+
+## Configuración Inicial
+
+### 1. Clonar el repositorio con Submódulos
 
 ```bash
 git clone --recurse-submodules https://github.com/lautaro-peralta/GarrSYS.git
 cd GarrSYS
 ```
 
-#### 2. Levantar infraestructura (PostgreSQL + Redis) con Docker
+**Si ya clonaste sin `--recurse-submodules`:**
+```bash
+git submodule update --init --recursive
+```
+
+### 2. Levantar Infraestructura (PostgreSQL + Redis)
 
 ```bash
 cd infra
 docker compose up -d
 ```
 
-Esto iniciará:
-- **PostgreSQL** 16 en el puerto 5432
-- **Redis** 7 en el puerto 6379
+Verificar que los servicios estén corriendo:
+```bash
+docker compose ps
+# Deberías ver:
+# NAME       STATUS
+# postgres   Up (healthy)
+# redis      Up
+```
 
-#### 3. Configurar el Backend
+### 3. Configurar Backend
 
 ```bash
 cd ../apps/backend
@@ -158,230 +217,262 @@ pnpm install
 cp .env.example .env.development
 ```
 
-Edita `.env.development` con las siguientes configuraciones importantes:
+**Editar `.env.development` con estos valores:**
+
+| Variable | Valor Por Defecto | Descripción |
+|----------|-------------------|-------------|
+| `NODE_ENV` | `development` | Ambiente |
+| `PORT` | `3000` | Puerto API |
+| `DB_HOST` | `localhost` | Host PostgreSQL |
+| `DB_PORT` | `5432` | Puerto PostgreSQL |
+| `DB_USER` | `postgres` | Usuario DB |
+| `DB_PASSWORD` | `postgres` | Password DB |
+| `DB_NAME` | `tpdesarrollo` | Nombre BD |
+| `REDIS_ENABLED` | `true` | Habilitar caché |
+| `REDIS_HOST` | `localhost` | Host Redis |
+| `REDIS_PORT` | `6379` | Puerto Redis |
+| `JWT_SECRET` | `dev-secret-key` | Clave JWT (cambiar en prod) |
+| `EMAIL_VERIFICATION_REQUIRED` | `false` | Modo demo (sin verificación) |
+| `SMTP_HOST` | `sandbox.smtp.mailtrap.io` | Server SMTP |
+| `SMTP_PORT` | `2525` | Puerto SMTP |
+| `SMTP_USER` | `tu-usuario` | Usuario Mailtrap |
+| `SMTP_PASS` | `tu-password` | Password Mailtrap |
 
 ```env
-# Database - Conexión a PostgreSQL de Docker
+# .env.development - Minimal para evaluadores
+NODE_ENV=development
+PORT=3000
+
+# Database
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=postgres
 DB_NAME=tpdesarrollo
 
-# Redis - Opcional pero recomendado
-REDIS_ENABLED=true
-REDIS_HOST=localhost
-REDIS_PORT=6379
+# Redis (opcional)
+REDIS_ENABLED=false
 
-# JWT Secret - Cambiar en producción
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+# JWT
+JWT_SECRET=dev-secret-key-change-in-production
 
-# Email - Configurar con tus credenciales de Mailtrap o SMTP
+# Email - Modo demo (sin verificación obligatoria)
+EMAIL_VERIFICATION_REQUIRED=false
 SMTP_HOST=sandbox.smtp.mailtrap.io
 SMTP_PORT=2525
 SMTP_USER=tu-usuario
 SMTP_PASS=tu-password
-
-# Modo demo (sin verificación de email obligatoria)
-EMAIL_VERIFICATION_REQUIRED=false
 ```
 
-#### 4. Configurar el Frontend
+### 4. Configurar Frontend
 
 ```bash
 cd ../frontend
 pnpm install
 ```
 
-El frontend ya está configurado para hacer proxy al backend en `http://localhost:3000` mediante `proxy.conf.json`.
+El frontend ya está preconfigurado con proxy al backend en `http://localhost:3000` mediante `proxy.conf.json`. **No requiere cambios adicionales.**
 
 ---
 
-## Ejecución
+## Ejecución Local
 
-### Orden de Ejecución Recomendado
+### Orden recomendada
 
-#### 1. Verificar que la infraestructura Docker esté corriendo
-
+#### Paso 1: Verificar infraestructura Docker
 ```bash
 cd infra
 docker compose ps
 ```
+Espera a que `postgres` esté "healthy" (puede tardar 10-15 segundos).
 
-Deberías ver los servicios `postgres` y `redis` como "healthy" o "running".
-
-#### 2. Iniciar el Backend
-
+#### Paso 2: Iniciar Backend
 ```bash
 cd apps/backend
-
-# Modo desarrollo (con verificación de email)
 pnpm start:dev
-
-# O modo demo (sin verificación de email obligatoria)
-pnpm start:demo
 ```
 
-El backend estará disponible en:
-- **API**: http://localhost:3000
-- **Swagger Docs**: http://localhost:3000/api-docs
-- **Health Check**: http://localhost:3000/health
+**Salida esperada:**
+```
+[Nest] 12345  - 05/21/2026, 10:00:00     LOG [NestFactory] Starting Nest application...
+[Nest] 12345  - 05/21/2026, 10:00:02     LOG [InstanceLoader] TypeOrmModule dependencies initialized
+[Nest] 12345  - 05/21/2026, 10:00:03     LOG Server listening on port 3000
+```
 
-#### 3. Iniciar el Frontend (en otra terminal)
+**Endpoints de verificación:**
+- Health: `curl http://localhost:3000/health`
+- API Docs: http://localhost:3000/api-docs
 
+#### Paso 3: Iniciar Frontend (nueva terminal)
 ```bash
 cd apps/frontend
 pnpm start
 ```
 
-El frontend estará disponible en:
-- **App**: http://localhost:4200
+**Salida esperada:**
+```
+✔ Compiled successfully.
+✔ Built successfully.
 
-### Comandos Útiles
-
-#### Infraestructura Docker
-
-```bash
-# Ver logs de la infraestructura
-cd infra
-docker compose logs -f
-
-# Detener infraestructura
-docker compose down
-
-# Reiniciar infraestructura
-docker compose restart
-
-# Detener y eliminar datos (¡CUIDADO!)
-docker compose down -v
+** Angular Live Development Server is listening on localhost:4200 **
 ```
 
-#### Backend
+**Acceder:** http://localhost:4200
 
-```bash
-cd apps/backend
+---
 
-# Ejecutar migraciones
-pnpm mikro-orm migration:up
+## Usuarios de Prueba
 
-# Limpiar build
-pnpm clean
+Después de cargar los datos de prueba, puedes ingresar con estas credenciales:
 
-# Type check
-pnpm type-check
-```
+| Rol | Email | Password | Funciones |
+|-----|-------|----------|-----------|
+| **Admin** | `thomas.shelby@shelbyltd.co.uk` | `password123` | Acceso total, gestión de usuarios |
+| **Partner 1** | `arthur.shelby@shelbyltd.co.uk` | `password123` | Consejo, decisiones |
+| **Partner 2** | `polly.gray@shelbyltd.co.uk` | `password123` | Consejo, decisiones |
+| **Distributor 1** | `john.shelby@shelbyltd.co.uk` | `password123` | Ventas, inventario |
+| **Distributor 2** | `michael.gray@shelbyltd.co.uk` | `password123` | Ventas, inventario |
+| **Distributor 3** | `isaiah.jesus@shelbyltd.co.uk` | `password123` | Ventas, inventario |
+| **Client 1** | `alfie@solomonsltd.co.uk` | `password123` | Compras |
+| **Client 2** | `johnny@example.com` | `password123` | Compras |
+| **Client 3** | `aberama@goldltd.com` | `password123` | Compras |
+| **Authority 1** | `campbell@birminghampd.gov.uk` | `password123` | Inspecciones |
+| **Authority 2** | `moss@birminghampd.gov.uk` | `password123` | Inspecciones |
 
-#### Frontend
-
-```bash
-cd apps/frontend
-
-# Build para producción
-pnpm build
-
-# Run tests
-pnpm test
-```
+**Datos de prueba incluidos:**
+- 5 zonas de operación
+- 10 productos (legales e ilegales)
+- 12 usuarios (múltiples roles)
+- 4 ventas de ejemplo
+- 3 sobornos registrados
 
 ---
 
 ## Cargar Datos de Prueba
 
-Después de levantar el backend por primera vez:
+### Opción 1: Script automático (Recomendado)
 
-**Opción 1 - Script automático:**
+Desde la **raíz del proyecto:**
 ```bash
-# Desde la raíz del proyecto
-bash scripts/load-test-data.sh    # Linux/Mac/Git Bash
-scripts\load-test-data.bat        # Windows
+# Linux/Mac/Git Bash
+bash scripts/load-test-data.sh
 
-# O con Make:
+# Windows (CMD o PowerShell)
+scripts\load-test-data.bat
+
+# O con Make
 make load-data
 ```
 
-**Opción 2 - Manual:**
+### Opción 2: Comando directo
+
 ```bash
 cd apps/backend
 node scripts/seed-test-data.mjs
 ```
 
-**Datos incluidos:** 5 zonas, 10 productos, 12 usuarios, 4 ventas, 3 sobornos.
+### Verificar que los datos se cargaron
 
-**Usuarios de prueba** (password: `password123`):
-- **ADMIN:** `thomas.shelby@shelbyltd.co.uk`
-- **PARTNERS:** `arthur.shelby@shelbyltd.co.uk`, `polly.gray@shelbyltd.co.uk`
-- **DISTRIBUTORS:** `john.shelby@shelbyltd.co.uk`, `michael.gray@shelbyltd.co.uk`, `isaiah.jesus@shelbyltd.co.uk`
-- **CLIENTS:** `alfie@solomonsltd.co.uk`, `johnny@example.com`, `aberama@goldltd.com`
-- **AUTHORITIES:** `campbell@birminghampd.gov.uk`, `moss@birminghampd.gov.uk`
+```bash
+# Acceder a Swagger
+curl http://localhost:3000/api-docs
+
+# O probar login
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "thomas.shelby@shelbyltd.co.uk",
+    "password": "password123"
+  }'
+```
+
+---
+
+## Testing
+
+### Backend
+
+```bash
+cd apps/backend
+
+# Ejecutar todos los tests
+pnpm test
+
+# Tests con cobertura
+pnpm test:cov
+
+# Tests en modo watch (escucha cambios)
+pnpm test:watch
+
+# Tests específicos
+pnpm test -- --testPathPattern=auth
+```
+
+### Frontend
+
+```bash
+cd apps/frontend
+
+# Ejecutar tests unitarios
+pnpm test
+
+# Tests con cobertura
+pnpm test:cov
+
+# Build de producción (valida tipos)
+pnpm build
+```
+
+### Verificación de tipos (TypeScript)
+
+```bash
+# Backend
+cd apps/backend && pnpm type-check
+
+# Frontend
+cd apps/frontend && pnpm type-check
+```
 
 ---
 
 ## Documentación
 
-- **[Propuesta del Proyecto](docs/proposal.md)** - Alcance funcional
-- **[Swagger UI](http://localhost:3000/api-docs)** - Documentación API (con backend corriendo)
-- **[README Backend](apps/backend/README.md)** - Arquitectura y endpoints
-- **[README Frontend](apps/frontend/README.md)** - Componentes y servicios
+### Documentación del Sistema
 
----
+- **[Propuesta del Proyecto](docs/proposal.md)** - Requerimientos funcionales y alcance
+- **[Swagger/OpenAPI](http://localhost:3000/api-docs)** - Documentación interactiva de endpoints (requiere backend corriendo)
 
-## Deployment en Producción
+### Documentación de Componentes
 
-El sistema está desplegado en la nube utilizando una arquitectura distribuida:
+Cada submódulo tiene su propio README:
 
-### 🌐 Arquitectura de Producción
+- **[README Backend](apps/backend/README.md)** - Arquitectura, endpoints, modelos
+- **[README Frontend](apps/frontend/README.md)** - Componentes, servicios, estructura
 
-```
-                    Internet
-                       │
-                       ↓
-        ┌──────────────────────────┐
-        │   Vercel Edge Network    │  ← Frontend (Angular SPA)
-        │                          │     • Hosting estático global
-        └──────────┬───────────────┘     • SSL/TLS automático
-                   │
-                   ↓ HTTPS API calls
-        ┌──────────────────────────┐
-        │   Render Cloud Platform  │  ← Backend (Node.js + Express)
-        │                          │     • Contenedores Docker
-        └──────────┬───────────────┘     • Health monitoring
-                   │
-                   ├─────────────────────┐
-                   ↓                     ↓
-        ┌──────────────────┐  ┌──────────────────┐
-        │   Neon.tech      │  │  Redis Cloud     │
-        │                  │  │                  │
-        │ PostgreSQL 16    │  │  Redis 7         │
-        │ Serverless DB    │  │  Cache layer     │
-        └──────────────────┘  └──────────────────┘
-```
+### Principales Endpoints
 
-**Componentes de la infraestructura:**
+**Autenticación**
+- `POST /auth/register` - Registrar usuario
+- `POST /auth/login` - Iniciar sesión
+- `POST /auth/refresh` - Renovar token JWT
 
-- **Frontend**: Aplicación Angular servida desde Vercel con CDN global
-- **Backend**: API REST en Node.js/Express desplegada en Render
-- **Base de Datos**: PostgreSQL 16 serverless en Neon.tech con pooling de conexiones
-- **Cache**: Redis 7 en Redis Cloud para optimización de consultas y sesiones
+**Gestión de Productos**
+- `GET /products` - Listar productos
+- `POST /products` - Crear producto
+- `GET /products/:id` - Obtener detalles
+- `PUT /products/:id` - Actualizar producto
 
----
+**Gestión de Ventas**
+- `GET /sales` - Listar ventas
+- `POST /sales` - Registrar venta
+- `GET /sales/:id` - Detalles de venta
 
-## Equipo
+**Usuarios**
+- `GET /users` - Listar usuarios
+- `GET /users/:id` - Detalles de usuario
+- `PUT /users/:id` - Actualizar usuario
 
-**Grupo Shelby - UTN FRRo**
-
-| Nombre | Legajo | GitHub |
-|--------|--------|--------|
-| Peralta, Lautaro Martín | 53483 | [@lautaro-peralta](https://github.com/lautaro-peralta) |
-| Delprato, Luca | 50215 | [@LucaDelpra](https://github.com/LucaDelpra) |
-| Splivalo, Tomas | 51665 | [@Tsplivalo](https://github.com/Tsplivalo) |
-
----
-
-## 🔗 Repositorios
-
-- **Principal:** [lautaro-peralta/GarrSYS](https://github.com/lautaro-peralta/GarrSYS)
-- **Backend:** [lautaro-peralta/TGS-Backend](https://github.com/lautaro-peralta/TGS-Backend)
-- **Frontend:** [Tsplivalo/TGS-Frontend](https://github.com/Tsplivalo/TGS-Frontend)
+**Ver todos los endpoints en Swagger:** http://localhost:3000/api-docs
 
 ---
 
@@ -389,19 +480,23 @@ El sistema está desplegado en la nube utilizando una arquitectura distribuida:
 
 ### Error: "Cannot connect to PostgreSQL"
 
-**Problema**: El backend no puede conectarse a la base de datos.
+**Síntomas:** Backend falla con `Error: connect ECONNREFUSED 127.0.0.1:5432`
 
-**Solución**:
-1. Verifica que Docker esté corriendo:
+**Soluciones:**
+1. Verifica que Docker está corriendo y PostgreSQL está iniciado:
    ```bash
    docker compose ps
+   docker compose logs postgres
    ```
-2. Verifica que el puerto 5432 esté libre:
+2. Verifica que el puerto 5432 está libre:
    ```bash
-   netstat -ano | findstr :5432  # Windows
-   lsof -i :5432                  # Linux/Mac
+   # Windows
+   netstat -ano | findstr :5432
+   
+   # Linux/Mac
+   lsof -i :5432
    ```
-3. Revisa las credenciales en `.env.development`:
+3. Verifica credenciales en `.env.development`:
    ```env
    DB_HOST=localhost
    DB_PORT=5432
@@ -409,62 +504,139 @@ El sistema está desplegado en la nube utilizando una arquitectura distribuida:
    DB_PASSWORD=postgres
    DB_NAME=tpdesarrollo
    ```
+4. Si todo falla, recrea la infraestructura:
+   ```bash
+   cd infra
+   docker compose down -v
+   docker compose up -d
+   ```
+
+---
 
 ### Error: "Redis connection failed"
 
-**Problema**: El backend no puede conectarse a Redis.
+**Síntomas:** Backend logs muestran `Error: connect ECONNREFUSED 127.0.0.1:6379`
 
-**Solución**:
-1. Si Redis es opcional, desactívalo en `.env.development`:
+**Soluciones:**
+1. **Opción A (Recomendado):** Desactiva Redis (es opcional):
    ```env
    REDIS_ENABLED=false
    ```
-2. O verifica que Redis esté corriendo:
+2. **Opción B:** Verifica que Redis está corriendo:
    ```bash
    docker compose ps redis
+   docker compose logs redis
    ```
 
-### Error: "Port 3000 already in use"
+---
 
-**Problema**: El puerto del backend está ocupado.
+### Error: "Port 3000/4200 already in use"
 
-**Solución**:
-1. Encuentra el proceso que usa el puerto:
+**Síntomas:** `Error: listen EADDRINUSE: address already in use :::3000`
+
+**Soluciones:**
+1. Encuentra qué proceso usa el puerto:
    ```bash
-   netstat -ano | findstr :3000  # Windows
-   lsof -i :3000                  # Linux/Mac
+   # Windows
+   netstat -ano | findstr :3000
+   
+   # Linux/Mac
+   lsof -i :3000
    ```
-2. Cierra ese proceso o cambia el puerto en `.env.development`:
+2. Cierra el proceso o cambia el puerto en `.env.development`:
    ```env
    PORT=3001
    ```
+3. Para el frontend, puedes usar:
+   ```bash
+   ng serve --port 4201
+   ```
 
-### Error: "Submódulos vacíos"
+---
 
-**Problema**: Las carpetas `apps/backend` y `apps/frontend` están vacías.
+### Error: "Submódulos vacíos" / "apps/backend no existe"
 
-**Solución**:
+**Síntomas:** Las carpetas `apps/backend` y `apps/frontend` están vacías
+
+**Soluciones:**
 ```bash
+# Descargar submódulos
+git submodule update --init --recursive
+
+# O fuerza sincronización
+git submodule sync --recursive
 git submodule update --init --recursive
 ```
 
+---
+
 ### Error: "CORS policy" en el frontend
 
-**Problema**: El frontend no puede hacer requests al backend.
+**Síntomas:** Console muestra `Access to XMLHttpRequest blocked by CORS policy`
 
-**Solución**:
-1. Verifica que el backend esté corriendo en `http://localhost:3000`
-2. Verifica `proxy.conf.json` en el frontend
-3. Verifica la variable `ALLOWED_ORIGINS` en el backend:
+**Soluciones:**
+1. Verifica que el backend está corriendo en `http://localhost:3000`
+2. Verifica `proxy.conf.json` en el frontend:
+   ```json
+   {
+     "/api": {
+       "target": "http://localhost:3000",
+       "pathRewrite": { "^/api": "" },
+       "changeOrigin": true
+     }
+   }
+   ```
+3. Verifica variable en backend `.env.development`:
    ```env
    ALLOWED_ORIGINS=http://localhost:4200
    ```
 
-### La base de datos está vacía
+---
 
-**Solución**: Carga los datos de prueba siguiendo la sección [Cargar Datos de Prueba](#cargar-datos-de-prueba).
+### Error: "La base de datos está vacía"
 
-### Limpiar y empezar de nuevo
+**Síntomas:** Login falla aunque backend esté corriendo
+
+**Solución:** Carga los datos de prueba:
+```bash
+make load-data
+# O manualmente:
+cd apps/backend && node scripts/seed-test-data.mjs
+```
+
+---
+
+### Error: "Versión de Node.js incorrecta"
+
+**Síntomas:** `Node.js v16 not supported` o similar
+
+**Solución:**
+```bash
+# Verificar versión actual
+node --version
+
+# Si no tienes Node.js 18+, instálalo:
+# Opción A: Desde nodejs.org
+# Opción B: Con nvm (recomendado)
+nvm install 18
+nvm use 18
+```
+
+---
+
+### Error: "pnpm not found"
+
+**Síntomas:** `command not found: pnpm`
+
+**Solución:**
+```bash
+npm install -g pnpm@latest
+pnpm --version  # Verificar
+```
+
+---
+
+### Limpiar todo y empezar de nuevo
 
 Si tienes problemas persistentes:
 
@@ -487,8 +659,52 @@ pnpm install
 cd ../../infra
 docker compose up -d
 
-# 5. Iniciar backend y frontend
+# 5. Iniciar backend y frontend (en diferentes terminales)
+cd ../apps/backend && pnpm start:dev
+cd ../apps/frontend && pnpm start
 ```
+
+---
+
+### Comandos Útiles Rápidos
+
+```bash
+# Verificar estado de todo
+make status
+
+# Ver logs de Docker
+docker compose logs -f
+
+# Ejecutar migraciones de BD
+cd apps/backend && pnpm mikro-orm migration:up
+
+# Build de producción
+cd apps/frontend && pnpm build
+
+# Type checking
+cd apps/backend && pnpm type-check
+cd ../frontend && pnpm type-check
+```
+
+---
+
+## Equipo
+
+**Grupo Shelby - UTN FRRo**
+
+| Nombre | Legajo | GitHub | Rol |
+|--------|--------|--------|-----|
+| Peralta, Lautaro Martín | 53483 | [@lautaro-peralta](https://github.com/lautaro-peralta) | Líder, Backend |
+| Delprato, Luca | 50215 | [@LucaDelpra](https://github.com/LucaDelpra) | Backend, Infraestructura |
+| Splivalo, Tomas | 51665 | [@Tsplivalo](https://github.com/Tsplivalo) | Frontend |
+
+---
+
+## 🔗 Repositorios
+
+- **Principal (Este):** [lautaro-peralta/GarrSYS](https://github.com/lautaro-peralta/GarrSYS)
+- **Backend (Submódulo):** [lautaro-peralta/TGS-Backend](https://github.com/lautaro-peralta/TGS-Backend)
+- **Frontend (Submódulo):** [Tsplivalo/TGS-Frontend](https://github.com/Tsplivalo/TGS-Frontend)
 
 ---
 
