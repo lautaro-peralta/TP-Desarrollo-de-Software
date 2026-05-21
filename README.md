@@ -154,6 +154,12 @@ git submodule status
 - **Backend Hosting:** Render (Node.js containers)
 - **Frontend Hosting:** Vercel (Edge Network)
 
+### Testing & CI/CD
+- **Backend Testing:** Jest con cobertura
+- **Frontend Testing:** Karma + Jasmine con cobertura
+- **Integración Continua:** GitHub Actions (workflows automáticos)
+- **Documentación:** Markdown con versionado en repositorios
+
 ---
 
 ## Requisitos Previos
@@ -435,6 +441,17 @@ cd apps/backend && pnpm type-check
 cd apps/frontend && pnpm type-check
 ```
 
+### CI/CD Automático
+
+El proyecto incluye **workflows automáticos con GitHub Actions**:
+
+- **Backend Tests:** Se ejecutan en cada push/PR al backend
+- **Frontend Tests:** Se ejecutan en cada push/PR al frontend
+- **Integración Completa:** Tests de full-stack cuando hay cambios en ambos
+- **Deploy a Producción:** Automático desde branch principal
+
+Consulta los workflows en: `.github/workflows/` de cada submódulo
+
 ---
 
 ## Documentación
@@ -694,11 +711,39 @@ cd ../frontend && pnpm type-check
 
 **Grupo Shelby - UTN FRRo**
 
-| Nombre | Legajo | GitHub | Rol |
-|--------|--------|--------|-----|
-| Peralta, Lautaro Martín | 53483 | [@lautaro-peralta](https://github.com/lautaro-peralta) | Líder, Backend |
-| Delprato, Luca | 50215 | [@LucaDelpra](https://github.com/LucaDelpra) | Backend, Infraestructura |
-| Splivalo, Tomas | 51665 | [@Tsplivalo](https://github.com/Tsplivalo) | Frontend |
+### Integrantes y Contribuciones
+
+| Nombre | Legajo | GitHub | Roles y Responsabilidades |
+|--------|--------|--------|---------------------------|
+| **Peralta, Lautaro Martín** | 53483 | [@lautaro-peralta](https://github.com/lautaro-peralta) | **Líder del Proyecto**, Desarrollo Backend (API REST, Autenticación, BD), Gestión del Proyecto, Diseño de Arquitectura, Planificación de Sprints, Coordinación General |
+| **Delprato, Luca** | 50215 | [@LucaDelpra](https://github.com/LucaDelpra) | Testing & QA (Backend y Frontend), Integración Continua (GitHub Actions), Automatización de Workflows, Mantenimiento de Infraestructura |
+| **Splivalo, Tomas** | 51665 | [@Tsplivalo](https://github.com/Tsplivalo) | Desarrollo Frontend (Angular SPA, Componentes UI), Testing Frontend, Optimización de Rendimiento, Integración Full-Stack |
+
+### Detalles de Contribuciones
+
+**Lautaro Martín Peralta (Líder)**
+- Diseño y planificación del sistema completo
+- Implementación del backend (Express.js + MikroORM + PostgreSQL)
+- Arquitectura de autenticación con JWT
+- Gestión de submódulos y coordinación entre equipos
+- Definición de la propuesta funcional y alcance del proyecto
+- Decisiones técnicas principales
+
+**Luca Delprato (Testing & QA)**
+- Implementación de suites de tests (Backend + Frontend)
+- Configuración y mantenimiento de GitHub Actions
+- Automatización de workflows de CI/CD
+- Coverage de tests y reportes de calidad
+- Resolución de problemas de integración continua
+- Documentación de estrategias de testing
+
+**Tomas Splivalo (Frontend & Testing)**
+- Desarrollo completo del Frontend (Angular 18)
+- Implementación de componentes reutilizables
+- Testing de componentes y servicios
+- Optimizaciones de rendimiento en Vercel
+- Resolución de problemas de caché y deployment
+- Colaboración en testing full-stack
 
 ---
 
