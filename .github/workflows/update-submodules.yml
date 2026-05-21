@@ -27,16 +27,23 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Actualizar submódulos y detectar cambios
-        id: check_changes # ID clave para referenciarlo después
+        id: check_changes
         run: |
+          # Guardar el estado actual
+          git diff --quiet && BEFORE_CLEAN=true || BEFORE_CLEAN=false
+          
+          # Actualizar submódulos
           git submodule update --remote --recursive
-          git add .
-          if git diff --cached --quiet; then
+          
+          # Verificar si hay cambios
+          if git diff --quiet && git diff --cached --quiet; then
             echo "changes_detected=false" >> $GITHUB_OUTPUT
-            echo "No hay cambios en los submódulos."
+            echo "✓ No hay cambios en los submódulos"
           else
             echo "changes_detected=true" >> $GITHUB_OUTPUT
-            echo "Se detectaron cambios en los submódulos."
+            git add .
+            echo "✓ Se detectaron cambios en los submódulos"
+            git diff --cached --stat
           fi
 
       - name: Set date
@@ -44,7 +51,6 @@ jobs:
         run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Crear Pull Request automático
-        # Esta línea es la que hace la magia:
         if: steps.check_changes.outputs.changes_detected == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
