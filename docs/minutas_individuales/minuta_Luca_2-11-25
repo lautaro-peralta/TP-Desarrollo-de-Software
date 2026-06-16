@@ -1,0 +1,60 @@
+🧾 Minuta – Implementación y Validación de Testing
+
+Fecha: 2025-11-02
+Branch: implement-test
+Responsable: Luca 
+
+📋 Resumen Ejecutivo
+
+Durante la jornada se completó la implementación integral del entorno de testing y automatización del backend de The Garrison System, incluyendo la ejecución local de pruebas, revisión de cobertura y validación previa a CI/CD.
+Se consolidaron configuraciones, pipelines y reportes en un esquema estandarizado para el repositorio backend, garantizando una cobertura superior al 80 % y la integración continua de los seis tipos de test definidos.
+
+⚙️ Tareas Realizadas
+🔧 Configuración y Entorno
+
+Confirmación del branch activo implement-test.
+
+Revisión de estructura de carpetas y archivos del pipeline.
+
+Verificación del correcto funcionamiento de workflows en .github/workflows/.
+
+Inclusión de dependabot.yml para mantenimiento automatizado de dependencias.
+
+🧩 Tipos de Testing Implementados
+
+Unitarios: Verificación funcional de controladores, servicios y utils.
+
+Integración: Ensayo de endpoints REST y dependencias de BD.
+
+E2E: Simulación completa de flujos API.
+
+Performance: Pruebas de estrés con métricas automatizadas.
+
+Seguridad: Validación de endpoints ante inyecciones y accesos indebidos.
+
+Regresión: Automatización para comparar resultados de builds previos.
+
+📊 Cobertura y Reportes
+
+Meta establecida: ≥ 80 % en ramas y funciones.
+
+Configuración de thresholds en vitest.config.ts para forzar el mínimo de cobertura.
+
+Generación automática de reportes HTML y JSON en coverage/.
+
+Integración con GitHub Actions para artefactos de cobertura y notificaciones.
+
+🚀 CI/CD
+
+Pipeline CI/CD completo: ejecución en tres jobs principales
+
+unit_integration
+
+e2e
+
+perf_security
+
+Publicación de resultados en artefactos y gating por fallos.
+
+Validación manual de ejecución antes de mergear a main.
+
