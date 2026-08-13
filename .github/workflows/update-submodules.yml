@@ -13,8 +13,25 @@ jobs:
   update-submodules:
     runs-on: ubuntu-latest
     steps:
+      # El job venía fallando a diario desde el 28/07 con
+      # "could not read Username for 'https://github.com'": PAT_SYNC estaba
+      # vacío o caducado y actions/checkout se quedaba sin credenciales en el
+      # primer fetch, con un error que no decía cuál era la causa. Se comprueba
+      # antes para que el fallo apunte al secreto.
+      - name: Verificar que PAT_SYNC está configurado
+        env:
+          PAT_SYNC: ${{ secrets.PAT_SYNC }}
+        run: |
+          if [ -z "$PAT_SYNC" ]; then
+            echo "::error::El secreto PAT_SYNC no está configurado o caducó."
+            echo "Necesita un token con permiso 'repo' para leer los submódulos"
+            echo "y abrir el pull request. Se renueva en Settings > Secrets and"
+            echo "variables > Actions del repositorio."
+            exit 1
+          fi
+
       - name: Checkout main repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.PAT_SYNC }}
           submodules: recursive
@@ -52,7 +69,7 @@ jobs:
 
       - name: Crear Pull Request automático
         if: steps.check_changes.outputs.changes_detected == 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.PAT_SYNC }}
           branch: ci/update-submodules-${{ github.run_id }}

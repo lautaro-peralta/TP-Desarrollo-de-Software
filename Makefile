@@ -1,4 +1,4 @@
-.PHONY: help load-data start stop clean start-prod stop-prod build-prod logs logs-prod status status-prod
+.PHONY: help load-data start stop clean start-prod stop-prod build-prod logs logs-prod status status-prod check-frontend-dockerfile
 
 help: ## Muestra comandos disponibles
 	@echo "Comandos de desarrollo:"
@@ -36,7 +36,20 @@ status: ## Ver estado de contenedores
 # Comandos de Producción (stack completo)
 # =============================================================================
 
-start-prod: ## Levanta stack completo (PostgreSQL + Redis + Backend + Frontend)
+# El perfil de producción construye el frontend desde apps/frontend/Dockerfile,
+# que todavía no existe en el repositorio del submódulo (sólo hay
+# Dockerfile.test). Sin esta comprobación docker compose falla a mitad del
+# build con un error de contexto que no dice qué falta.
+check-frontend-dockerfile:
+	@if [ ! -f apps/frontend/Dockerfile ]; then \
+		echo "❌ Falta apps/frontend/Dockerfile"; \
+		echo "   El perfil de producción lo necesita para construir la imagen"; \
+		echo "   del frontend. Comprueba que el submódulo esté inicializado"; \
+		echo "   (git submodule update --init) y que el repositorio lo incluya."; \
+		exit 1; \
+	fi
+
+start-prod: check-frontend-dockerfile ## Levanta stack completo (PostgreSQL + Redis + Backend + Frontend)
 	@if [ ! -f infra/.env.production ]; then \
 		echo "❌ Error: infra/.env.production no existe"; \
 		echo "   Copia infra/.env.production.example y configúralo"; \
@@ -51,7 +64,7 @@ start-prod: ## Levanta stack completo (PostgreSQL + Redis + Backend + Frontend)
 stop-prod: ## Detiene stack completo
 	@cd infra && docker compose --profile production down
 
-build-prod: ## Reconstruye imágenes de producción
+build-prod: check-frontend-dockerfile ## Reconstruye imágenes de producción
 	@cd infra && docker compose --profile production build backend frontend
 	@echo "✓ Imágenes reconstruidas. Ejecuta 'make start-prod' para reiniciar"
 

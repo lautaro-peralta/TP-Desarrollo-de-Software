@@ -42,8 +42,8 @@ Usar credenciales en la sección "Usuarios de Prueba" ↓
 git clone --recurse-submodules https://github.com/lautaro-peralta/GarrSYS.git
 cd GarrSYS
 
-# 2. Setup automático (requiere Docker)
-make setup    # Linux/Mac
+# 2. Levantar la infraestructura (requiere Docker)
+make start    # Linux/Mac
 # O manualmente:
 cd infra && docker compose up -d && cd ..
 
@@ -139,7 +139,7 @@ git submodule status
 - **Documentación API:** Swagger/OpenAPI
 
 ### Frontend
-- **Framework:** Angular 18+
+- **Framework:** Angular 20
 - **Lenguaje:** TypeScript
 - **Estilos:** SCSS
 - **Proxy:** Proxy a Backend local
@@ -155,7 +155,7 @@ git submodule status
 - **Frontend Hosting:** Vercel (Edge Network)
 
 ### Testing & CI/CD
-- **Backend Testing:** Jest con cobertura
+- **Backend Testing:** pendiente (el repositorio todavía no tiene suite)
 - **Frontend Testing:** Karma + Jasmine con cobertura
 - **Integración Continua:** GitHub Actions (workflows automáticos)
 - **Documentación:** Markdown con versionado en repositorios
