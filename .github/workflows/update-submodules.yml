@@ -78,7 +78,7 @@ jobs:
           body: |
             🤖 **Actualización automática de referencias de submódulos**
 
-            - `apps/frontend` → Últimos cambios desde [`Tsplivalo/TGS-Frontend`](https://github.com/Tsplivalo/TGS-Frontend)
+            - `apps/frontend` → Últimos cambios desde [`lautaro-peralta/tgs-frontend`](https://github.com/lautaro-peralta/tgs-frontend) (`deploy/vercel`)
             - `apps/backend` → Últimos cambios desde [`lautaro-peralta/TGS-Backend`](https://github.com/lautaro-peralta/TGS-Backend)
 
             _Este pull request fue generado automáticamente por GitHub Actions._

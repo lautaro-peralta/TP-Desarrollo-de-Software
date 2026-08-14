@@ -113,7 +113,7 @@ GarrSYS/
 
 Los submódulos del proyecto están en repositorios externos:
 - **Backend:** https://github.com/lautaro-peralta/TGS-Backend
-- **Frontend:** https://github.com/Tsplivalo/TGS-Frontend
+- **Frontend:** https://github.com/lautaro-peralta/tgs-frontend (rama `deploy/vercel`)
 
 **Para verificar estado de submódulos:**
 ```bash
@@ -723,7 +723,7 @@ cd ../frontend && pnpm type-check
 
 - **Principal (Este):** [lautaro-peralta/GarrSYS](https://github.com/lautaro-peralta/GarrSYS)
 - **Backend (Submódulo):** [lautaro-peralta/TGS-Backend](https://github.com/lautaro-peralta/TGS-Backend)
-- **Frontend (Submódulo):** [Tsplivalo/TGS-Frontend](https://github.com/Tsplivalo/TGS-Frontend)
+- **Frontend (Submódulo):** [lautaro-peralta/tgs-frontend](https://github.com/lautaro-peralta/tgs-frontend) — rama `deploy/vercel`
 
 ---
 

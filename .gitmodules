@@ -1,6 +1,8 @@
 [submodule "apps/frontend"]
 	path = apps/frontend
-	url = https://github.com/Tsplivalo/TGS-Frontend.git
+	url = https://github.com/lautaro-peralta/tgs-frontend.git
+	branch = deploy/vercel
 [submodule "apps/backend"]
 	path = apps/backend
 	url = https://github.com/lautaro-peralta/TGS-Backend.git
+	branch = main
